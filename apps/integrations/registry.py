@@ -1,4 +1,4 @@
-from apps.integrations.exceptions import ProviderNotRegisteredException
+from apps.integrations.exceptions import ProviderNotRegisteredError
 
 class ProviderRegistry:
     def __init__(self):
@@ -15,7 +15,7 @@ class ProviderRegistry:
         provider_class = self._providers.get(system_type)
 
         if not provider_class:
-            raise ProviderNotRegisteredException(f"No se ha registrado ningún proveedor para el tipo de sistema '{system_type}'")
+            raise ProviderNotRegisteredError(f"No se ha registrado ningún proveedor para el tipo de sistema '{system_type}'")
         
         return provider_class(config=config)
     

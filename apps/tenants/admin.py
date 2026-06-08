@@ -11,7 +11,7 @@ class TenantAdmin(admin.ModelAdmin):
         "updated_at",
     )
 
-    list_filter = ("is_active")
+    list_filter = ("is_active",)
     search_fields = ("name", "trade_name")
     filter_horizontal = ("parking_sites",)
     

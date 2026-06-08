@@ -5,7 +5,7 @@ from django.db import models
 class ValidationType(models.Model):
     name = models.CharField(max_length=150)
     code = models.CharField(max_length=50, unique=True)
-    external_code = models.CharField(max_lenght=100)
+    external_code = models.CharField(max_length=100)
 
     description = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)

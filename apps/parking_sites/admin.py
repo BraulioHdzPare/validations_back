@@ -12,5 +12,5 @@ class ParkingSiteAdmin(admin.ModelAdmin):
         "updated_at",
     )
 
-    list_filter = ("is_active", "integration_system_type")
+    list_filter = ("is_active",)
     search_fields = ("code", "name")
