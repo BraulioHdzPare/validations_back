@@ -10,5 +10,7 @@ class IntegrationsConfig(AppConfig):
         # Importar las señales para que se registren
         from apps.integrations.registry import provider_registry
         from apps.integrations.clients.designa.adapter import DesignaProvider
+        from apps.integrations.clients.datapark.adapter import DataparkProvider
 
         provider_registry.register("DESIGNA", DesignaProvider)
+        provider_registry.register("DATAPARK", DataparkProvider)

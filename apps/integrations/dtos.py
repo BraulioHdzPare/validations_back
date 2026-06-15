@@ -8,7 +8,7 @@ class TicketData:
     ticket_number: str
     status: str
     entry_datetime: datetime | None = None
-    current_amoount: Decimal | None = None
+    current_amount: Decimal | None = None
     paid_amount: Decimal | None = None
     currency: str = 'MXN'
     raw_response: dict[str, Any] | None = None

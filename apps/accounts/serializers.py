@@ -25,6 +25,8 @@ class LoginSerializer(serializers.Serializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     tenant_id = serializers.IntegerField(source="tenant.id", read_only=True, allow_null=True)
     tenant_name = serializers.CharField(source="tenant.name", read_only=True, allow_null=True)
+    parking_site_id = serializers.IntegerField(source="parking_site.id", read_only=True, allow_null=True)
+    parking_site_name = serializers.CharField(source="parking_site.name", read_only=True, allow_null=True)
     role_display = serializers.CharField(source="get_role_display", read_only=True)
 
     class Meta:
@@ -39,6 +41,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "role_display",
             "tenant_id",
             "tenant_name",
+            "parking_site_id",
+            "parking_site_name",
         ]
         read_only_fields = fields
 

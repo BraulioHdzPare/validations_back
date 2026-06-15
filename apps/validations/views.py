@@ -1,5 +1,3 @@
-from django.shortcuts import render
-from requests import options
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -29,14 +27,14 @@ class TicketLookupAPIView(APIView):
         )
 
         ticket = result['ticket']
-        option = result['validation_options']
+        options = result['validation_options']
 
         return Response(
             {
                 "ticket": {
                     "ticket_number": ticket.ticket_number,
                     "status": ticket.status,
-                    "entry_time": ticket.entry_datetime,
+                    "entry_datetime": ticket.entry_datetime,
                     "current_amount": ticket.current_amount,
                     "paid_amount": ticket.paid_amount,
                     "currency": ticket.currency,

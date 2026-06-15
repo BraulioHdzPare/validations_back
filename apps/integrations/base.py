@@ -22,7 +22,7 @@ class IParkingProvider(ABC):
         raise NotImplementedError
     
     @abstractmethod
-    def get_validations_options(self, *, ticket, context: dict):
+    def get_validation_options(self, *, ticket, context: dict):
         """Obtiene las opciones de validación disponibles para este proveedor.
         ticket: La información del ticket para el cual se quieren obtener las opciones de validación.
         context: Un diccionario con información adicional que pueda ser útil para determinar las opciones de validación

@@ -21,9 +21,12 @@ class User(AbstractUser):
         related_name="users",
     )
 
-    # Parking sites this user can operate (empty = all sites of their tenant)
-    parking_sites = models.ManyToManyField(
+    # Un usuario pertenece a una sola unidad de estacionamiento.
+    # Los admins no requieren unidad (null=True).
+    parking_site = models.ForeignKey(
         "parking_sites.ParkingSite",
+        on_delete=models.SET_NULL,
+        null=True,
         blank=True,
         related_name="users",
     )

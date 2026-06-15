@@ -39,3 +39,6 @@ class DesignaProvider(IParkingProvider):
                 "status": "OK",
             },
         )
+
+    def health_check(self):
+        return {"provider": "DESIGNA", "status": "OK"}
