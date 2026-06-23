@@ -31,6 +31,12 @@ environ.Env.read_env(BASE_DIR / '.env')
 SECRET_KEY = env('DJANGO_SECRET_KEY', default='django-insecure-r8yf#%!e54%1i*zb$lapynkyd+r=1%xh)n@3gx#8my@+++x&fg')
 #SECRET_KEY = 'django-insecure-r8yf#%!e54%1i*zb$lapynkyd+r=1%xh)n@3gx#8my@+++x&fg'
 
+# Llave Fernet para cifrar campos sensibles (credenciales de integraciones).
+# Genera una con: python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+# Debe ser estable: si cambia, los valores ya cifrados no se podrán descifrar.
+# Si queda vacía, el cifrado de campos se deshabilita (se guardan en texto plano).
+FIELD_ENCRYPTION_KEY = env('FIELD_ENCRYPTION_KEY', default='')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DJANGO_DEBUG')
 
