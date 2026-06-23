@@ -63,14 +63,16 @@ class ApplyValidationAPIView(APIView):
             user = request.user,
             parking_site_id = serializer.validated_data['parking_site_id'],
             ticket_number = serializer.validated_data['ticket_number'],
-            validation_type_id = serializer.validated_data['validation_type_id']
+            validation_code = serializer.validated_data['validation_code']
         )
 
         return Response(
             {
                 "success": result.success,
-                "message":result.message,
+                "message": result.message,
                 "external_reference": result.external_reference,
+                "original_amount": result.original_amount,
+                "final_amount": result.final_amount,
             },
             status=status.HTTP_200_OK if result.success else status.HTTP_400_BAD_REQUEST,
         )

@@ -1,3 +1,5 @@
+from rest_framework.exceptions import NotFound
+
 from apps.integrations.dispatcher import IntegrationDispatcher
 from apps.parking_sites.models import ParkingSite
 from apps.validations.models import ValidationType, ValidationLog
@@ -24,17 +26,18 @@ class TicketLookupService:
             }
         )
 
-        options = dispatcher.get_validation_options(
-            ticket = ticket,
-            context = {
-                "user": user,
-                "parking_site": parking_site,
-            }
+        # Catálogo local: las validaciones aplicables salen de los ValidationType
+        # ligados a este parking_site, no del proveedor externo.
+        options = ValidationType.objects.filter(
+            parking_sites = parking_site,
+            is_active = True,
         )
+        if getattr(user, "is_tenant_user", False) and user.tenant_id:
+            options = options.filter(tenants = user.tenant)
 
         return {
             "ticket": ticket,
-            "validation_options": options,
+            "validation_options": list(options),
         }
     
 class ApplyValidationService:
@@ -44,17 +47,21 @@ class ApplyValidationService:
         self, *, user,
         parking_site_id: int,
         ticket_number: str,
-        validation_type_id: int
+        validation_code: str
     ):
         parking_site = ParkingSite.objects.select_related('integration').get(
             id=parking_site_id,
             is_active=True
         )
 
-        validation_type = ValidationType.objects.get(
-            id=validation_type_id,
-            parking_site=parking_site
-        )
+        try:
+            validation_type = ValidationType.objects.get(
+                code=validation_code,
+                parking_sites=parking_site,
+                is_active=True,
+            )
+        except ValidationType.DoesNotExist:
+            raise NotFound("La validación seleccionada no está disponible para esta unidad.")
 
         dispatcher = IntegrationDispatcher(
             integration_config = parking_site.integration
@@ -72,6 +79,7 @@ class ApplyValidationService:
 
         ValidationLog.objects.create(
             user = user,
+            tenant = user.tenant,
             parking_site = parking_site,
             ticket_number = ticket_number,
             validation_type = validation_type,
