@@ -11,6 +11,7 @@ from apps.validations.services import (
     TicketLookupService,
     ApplyValidationService
 )
+from apps.integrations.exceptions import IntegrationError, TicketNotFoundError
 
 
 class TicketLookupAPIView(APIView):
@@ -20,11 +21,22 @@ class TicketLookupAPIView(APIView):
         serializer = TicketLookupRequestSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        result = TicketLookupService().execute(
-            user = request.user,
-            parking_site_id = serializer.validated_data['parking_site_id'],
-            ticket_number = serializer.validated_data['ticket_number']
-        )
+        try:
+            result = TicketLookupService().execute(
+                user = request.user,
+                parking_site_id = serializer.validated_data['parking_site_id'],
+                ticket_number = serializer.validated_data['ticket_number']
+            )
+        except TicketNotFoundError:
+            return Response(
+                {"ticket": None, "validation_options": []},
+                status=status.HTTP_200_OK,
+            )
+        except IntegrationError as exc:
+            return Response(
+                {"detail": f"Error de integración: {exc}"},
+                status=status.HTTP_502_BAD_GATEWAY,
+            )
 
         ticket = result['ticket']
         options = result['validation_options']

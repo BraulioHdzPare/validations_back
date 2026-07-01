@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 BINDING_QNAME = "{http://tempuri.org/}BasicHttpBinding_IValidationService"
 
 # Constantes de Datapark.
-MEDIA_TYPE_BARCODE = 3
+MEDIA_TYPE_BARCODE = 2
 USAGE_TYPE_TRANSIENT = 2
 
 
@@ -29,13 +29,13 @@ class DataparkClient:
 
         session = Session()
         if username:
-            session.auth = HTTPBasicAuth(username, password)
+            session.auth = HTTPBasicAuth(username, password) # Autenticación HTTP Basic para el endpoint SOAP
         session.verify = False  # endpoint HTTP / certificado interno
 
-        transport = Transport(session=session, timeout=timeout)
-        settings = Settings(strict=False, xml_huge_tree=True)
+        transport = Transport(session=session, timeout=timeout) # Transporta las solicitudes SOAP usando la sesión configurada
+        settings = Settings(strict=False, xml_huge_tree=True) # Configuración de Zeep para manejar XML grandes y no estrictos
 
-        self._client = Client(wsdl=self._wsdl_url(base_url), transport=transport, settings=settings)
+        self._client = Client(wsdl=self._wsdl_url(base_url), transport=transport, settings=settings) # Crea un cliente Zeep para el WSDL del servicio, usando el transporte y la configuración definidos
         # Operaciones fijadas al endpoint configurado (no al puerto HTTPS interno).
         self._service = self._client.create_service(BINDING_QNAME, base_url)
 
