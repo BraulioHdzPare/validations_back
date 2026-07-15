@@ -1,17 +1,40 @@
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 # Create your views here.
+from apps.accounts.permissions import IsAdmin
+from apps.validations.models import ValidationType
 from apps.validations.serializers import (
     TicketLookupRequestSerializer,
-    ApplyValidationRequestSerializer
+    ApplyValidationRequestSerializer,
+    ValidationTypeSerializer,
 )
 from apps.validations.services import (
     TicketLookupService,
     ApplyValidationService
 )
 from apps.integrations.exceptions import IntegrationError, TicketNotFoundError
+
+
+class ValidationTypeViewSet(viewsets.ModelViewSet):
+    """CRUD administrativo de descuentos/validaciones (solo `admin`).
+
+    El borrado es lógico: `DELETE` desactiva (`is_active=False`) en lugar de
+    eliminar el registro, respetando el `PROTECT` de `ValidationLog` y el
+    filtro `is_active=True` que usa el lookup. Para reactivar: `PATCH
+    {"is_active": true}`.
+    """
+
+    queryset = ValidationType.objects.prefetch_related(
+        "parking_sites", "tenants"
+    ).all()
+    serializer_class = ValidationTypeSerializer
+    permission_classes = [IsAdmin]
+
+    def perform_destroy(self, instance):
+        instance.is_active = False
+        instance.save(update_fields=["is_active", "updated_at"])
 
 
 class TicketLookupAPIView(APIView):

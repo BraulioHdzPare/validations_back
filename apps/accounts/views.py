@@ -1,4 +1,4 @@
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -6,12 +6,32 @@ from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
 
+from apps.accounts.models import User
+from apps.accounts.permissions import IsAdmin
 from apps.accounts.serializers import (
     ChangePasswordSerializer,
     LoginSerializer,
+    UserManagementSerializer,
     UserProfileSerializer,
 )
 from apps.accounts.services import AuthService
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    """CRUD administrativo de usuarios (solo `admin`).
+
+    El borrado es lógico: `DELETE` desactiva (`is_active=False`) en lugar de
+    eliminar, preservando la integridad de los `ValidationLog` (que referencian
+    al usuario con `PROTECT`). Para reactivar: `PATCH {"is_active": true}`.
+    """
+
+    queryset = User.objects.select_related("tenant", "parking_site").all()
+    serializer_class = UserManagementSerializer
+    permission_classes = [IsAdmin]
+
+    def perform_destroy(self, instance):
+        instance.is_active = False
+        instance.save(update_fields=["is_active"])
 
 
 class LoginView(APIView):
