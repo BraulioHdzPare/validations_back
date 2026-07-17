@@ -4,6 +4,7 @@ from django.db import models
 class Tenant(models.Model):
     name = models.CharField(max_length=150)
     trade_name = models.CharField(max_length=150, blank=True)
+    description = models.TextField(blank=True)
     parking_sites = models.ManyToManyField(
         "parking_sites.ParkingSite",
         related_name = "tenants",

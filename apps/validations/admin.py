@@ -8,11 +8,12 @@ class ValidationTypeAdmin(admin.ModelAdmin):
         "name",
         "code",
         "external_code",
+        "discount_type",
         "is_active",
         "updated_at",
     )
 
-    list_filter = ("is_active",)
+    list_filter = ("is_active", "discount_type")
     search_fields = ("name", "code", "external_code")
     filter_horizontal = ("parking_sites", "tenants")
 

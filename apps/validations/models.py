@@ -3,9 +3,25 @@ from django.db import models
 
 # Create your models here.
 class ValidationType(models.Model):
+    class DiscountType(models.TextChoices):
+        TIME = "time", "Tiempo"
+        PERCENTAGE = "percentage", "Porcentaje"
+        FIXED_RATE = "fixed_rate", "Tarifa fija"
+        COURTESY = "courtesy", "Cortesía"
+
     name = models.CharField(max_length=150)
     code = models.CharField(max_length=50, unique=True)
     external_code = models.CharField(max_length=100)
+
+    # Categoría solo presentacional: agrupa y filtra en el portal.
+    # El comportamiento real del descuento (cuánto y cómo descuenta) lo define
+    # el sistema externo y se invoca vía `external_code`.
+    discount_type = models.CharField(
+        max_length=20,
+        choices=DiscountType.choices,
+        blank=True,
+        default="",
+    )
 
     description = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)

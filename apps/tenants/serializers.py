@@ -23,6 +23,7 @@ class TenantSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "trade_name",
+            "description",
             "is_active",
             "parking_sites",
             "created_at",

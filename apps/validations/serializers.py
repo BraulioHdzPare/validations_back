@@ -9,6 +9,7 @@ class TicketLookupRequestSerializer(serializers.Serializer):
     parking_site_id = serializers.IntegerField()
     ticket_number = serializers.CharField(max_length=100)
 
+
 class ApplyValidationRequestSerializer(serializers.Serializer):
     parking_site_id = serializers.IntegerField()
     ticket_number = serializers.CharField(max_length=100)
@@ -40,6 +41,7 @@ class ValidationTypeSerializer(serializers.ModelSerializer):
             "name",
             "code",
             "external_code",
+            "discount_type",
             "description",
             "is_active",
             "parking_sites",
