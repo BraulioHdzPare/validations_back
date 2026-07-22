@@ -15,7 +15,7 @@ class UserAdmin(BaseUserAdmin):
         (
             "Rol y acceso",
             {
-                "fields": ("role", "tenant", "parking_sites"),
+                "fields": ("role", "tenant", "parking_site"),
             },
         ),
     )
@@ -24,7 +24,7 @@ class UserAdmin(BaseUserAdmin):
         (
             "Rol y acceso",
             {
-                "fields": ("role", "tenant", "parking_sites"),
+                "fields": ("role", "tenant", "parking_site"),
             },
         ),
     )

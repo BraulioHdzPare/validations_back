@@ -54,12 +54,20 @@ class ApplyValidationService:
             is_active=True
         )
 
+        # Mismo filtrado que TicketLookupService: la validación debe estar activa
+        # y ligada a esta unidad y —si el usuario es locatario— a su tenant.
+        # Sin este filtro por tenant, un tenant_user podría aplicar un descuento
+        # no autorizado para su locatario conociendo su `code`.
+        candidates = ValidationType.objects.filter(
+            code=validation_code,
+            parking_sites=parking_site,
+            is_active=True,
+        )
+        if getattr(user, "is_tenant_user", False) and user.tenant_id:
+            candidates = candidates.filter(tenants=user.tenant)
+
         try:
-            validation_type = ValidationType.objects.get(
-                code=validation_code,
-                parking_sites=parking_site,
-                is_active=True,
-            )
+            validation_type = candidates.get()
         except ValidationType.DoesNotExist:
             raise NotFound("La validación seleccionada no está disponible para esta unidad.")
 
