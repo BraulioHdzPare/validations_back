@@ -1,4 +1,9 @@
 -r base.txt
 
-gunicorn>=22.0
-whitenoise>=6.7
+# ---------------------------------------------------------------------------
+# Servidor de producción y estáticos (solo prod).
+# No forman parte del set instalado/probado en local; versiones fijadas al piso
+# conocido — conviene verificarlas/actualizarlas al montar el entorno real.
+# ---------------------------------------------------------------------------
+gunicorn==22.0.0
+whitenoise==6.7.0

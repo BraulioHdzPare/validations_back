@@ -1,9 +1,17 @@
-Django>=5.2,<6.1
-djangorestframework>=3.15
-djangorestframework-simplejwt>=5.3
-django-cors-headers>=4.3
-django-environ>=0.11
-psycopg[binary]>=3.2
-requests>=2.32
-httpx>=0.27
-cryptography>=42.0
+# ---------------------------------------------------------------------------
+# Dependencias de runtime, compartidas por todos los entornos (local y prod).
+# Versiones fijadas (==) a las probadas, para instalaciones reproducibles.
+# ---------------------------------------------------------------------------
+Django==6.0.5
+djangorestframework==3.17.1
+djangorestframework-simplejwt==5.5.1
+django-cors-headers==4.9.0
+django-environ==0.13.0
+psycopg[binary]==3.3.4
+cryptography==48.0.0
+requests==2.34.2
+
+# Cliente SOAP para Datapark (DpWebService). Se importa al arrancar Django
+# (IntegrationsConfig.ready → DataparkProvider → client.py), por lo que es
+# obligatorio en TODOS los entornos, no solo donde se use la integración.
+zeep==4.3.3

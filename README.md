@@ -50,7 +50,7 @@ API del sistema externo de estacionamiento
 | Framework | Django 5.2+ |
 | API | Django REST Framework 3.15+ |
 | Base de datos | PostgreSQL (psycopg v3) |
-| HTTP (sync/async) | requests + httpx |
+| HTTP / SOAP | requests + zeep (cliente SOAP de Datapark) |
 | Encriptación de campos | cryptography |
 | Config de entorno | django-environ |
 | Servidor de producción | Gunicorn + WhiteNoise |

@@ -1,4 +1,7 @@
 -r base.txt
 
-django-debug-toolbar>=4.4
-ipython>=8.0
+# ---------------------------------------------------------------------------
+# Herramientas de desarrollo (solo local).
+# ---------------------------------------------------------------------------
+django-debug-toolbar==6.3.0
+ipython==9.13.0
